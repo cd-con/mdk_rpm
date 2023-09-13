@@ -1,0 +1,17 @@
+﻿<Window x:Class="Practice1_var11.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Practice1_var11"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="500" Width="800">
+    <Grid Background="Gray">
+        <TextBox x:Name="RandValDisplay" Margin="10,10,10,410" IsReadOnly="True" Text="Диапазон сгенерированных значений" TextWrapping="Wrap"/>
+        <TextBox x:Name="ResultDisplay" Margin="10,79,400,352" IsReadOnly="True" Text="Ответ" TextWrapping="Wrap"/>
+        <Button x:Name="GenerateRandList" Margin="428,79,227,352" Content="Сгенерировать значения" Click="GenerateRandList_Click"/>
+        <Button x:Name="Compute" Margin="428,137,227,300" Content="Найти произведение" Click="Compute_Click"/>
+        <Button x:Name="ComputeAll" Margin="578,79,10,300" Content="Сгенерировать значения и\nнайти произведение" Click="ComputeAll_Click"/>
+        <TextBox x:Name="NumInput" Margin="10,137,400,295" Text="Введите верхнюю границу диапазона" TextWrapping="Wrap"/>
+    </Grid>
+</Window>
