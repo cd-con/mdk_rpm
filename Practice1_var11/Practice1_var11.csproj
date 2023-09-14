@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Lib_11\Lib_11.csproj" />
+    <ProjectReference Include="..\RustyUltimateLib\RustyUltimateLib.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,55 +1,22 @@
 ﻿using System.Collections.Generic;
 using System.Windows;
 using Lib_11;
+using RustyUltimateLib;
 namespace Practice1_var11
 {
     public partial class MainWindow : Window
     {
-        private List<int> _list = new List<int>();
-        public MainWindow()
-        {
-            InitializeComponent();
-        }
+        private List<int> _f = new List<int>();
+        public MainWindow(){ InitializeComponent(); }
 
-        private void RegenTask()
-        {
-            if (int.TryParse(NumInput.Text, out int n))
-            {
-                _list.RegenerateList(n);
-                RandValDisplay.Text = string.Join(", ", _list);
-            }
-            else
-            {
-                MessageBox.Show("невалидный ввод :wheelchair:");
-            }
-        }
+        private void a(){ _f = Practice1.RegenerateList(Lib.ValidatedInput(i.Text, new IntRange(1), (a) => MessageBox.Show(a).ToString())); g.Text = string.Join(", ", _f); }
 
-        private void ComputeTask()
-        {
-            if (_list.Count > 0)
-            {
-                ResultDisplay.Text = _list.GetMul().ToString();
-            }
-            else
-            {
-                MessageBox.Show("ШОЙГУ!!! ГЕРАСИМОВ!!! ГДЕ ЭЛЕМЕНТЫ В СПИСКЕ???\n\n(пустой список)");
-            }
-        }
+        private void b() { if (_f.Count > 0) { h.Text = _f.GetMul().ToString(); } else { MessageBox.Show("ШОЙГУ!!! ГЕРАСИМОВ!!! ГДЕ ЭЛЕМЕНТЫ В СПИСКЕ???\n\n(пустой список)"); } }
 
-        private void GenerateRandList_Click(object sender, RoutedEventArgs e)
-        {
-            RegenTask();
-        }
+        private void c(object sender, RoutedEventArgs e) => a();
 
-        private void Compute_Click(object sender, RoutedEventArgs e)
-        {
-            ComputeTask();
-        }
+        private void d(object sender, RoutedEventArgs e) => b();
 
-        private void ComputeAll_Click(object sender, RoutedEventArgs e)
-        {
-            RegenTask();
-            ComputeTask();
-        }
+        private void e(object sender, RoutedEventArgs e) { a(); b(); }
     }
 }
