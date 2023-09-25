@@ -21,6 +21,6 @@ namespace Lib_11
         /// </summary>
         /// <param name="x">Входной список.</param>
         /// <returns>Произведение списка чисел.</returns>
-        public static int GetMul(this List<int> x) => x.Aggregate(1, (a, b) => a * b);
+        public static int GetMul(this List<int> x) => x.Aggregate(1, (a, b) => b == 0 ? a : a * b);
     }
 }
