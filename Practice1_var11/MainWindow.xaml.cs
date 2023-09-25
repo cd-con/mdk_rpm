@@ -6,17 +6,29 @@ namespace Practice1_var11
 {
     public partial class MainWindow : Window
     {
-        private List<int> _f = new List<int>();
+        private List<int> _list = new();
         public MainWindow(){ InitializeComponent(); }
 
-        private void a(){ _f = Practice1.RegenerateList(Lib.ValidatedInput(i.Text, new IntRange(1), (a) => MessageBox.Show(a).ToString())); g.Text = string.Join(", ", _f); }
+        private void RegenerateList(){ 
+            _list = Practice1.RegenerateList(Lib.ValidatedInput(range.Text, new IntRange(1), (a) => MessageBox.Show(a).ToString())); 
+            generatedRange.Text = string.Join(", ", _list); 
+        }
 
-        private void b() { if (_f.Count > 0) { h.Text = _f.GetMul().ToString(); } else { MessageBox.Show("ШОЙГУ!!! ГЕРАСИМОВ!!! ГДЕ ЭЛЕМЕНТЫ В СПИСКЕ???\n\n(пустой список)"); } }
+        private void Compute() { 
+            if (_list.Count > 0) { 
+                result.Text = _list.GetMul().ToString(); 
+            } else { 
+                MessageBox.Show("ШОЙГУ!!! ГЕРАСИМОВ!!! ГДЕ ЭЛЕМЕНТЫ В СПИСКЕ???\n\n(пустой список)"); 
+            } 
+        }
 
-        private void c(object sender, RoutedEventArgs e) => a();
+        private void RegenerateList_Click(object sender, RoutedEventArgs e) => RegenerateList();
 
-        private void d(object sender, RoutedEventArgs e) => b();
+        private void Compute_Click(object sender, RoutedEventArgs e) => Compute();
 
-        private void e(object sender, RoutedEventArgs e) { a(); b(); }
+        private void Regenerate_n_Compute_Click(object sender, RoutedEventArgs e) { 
+            RegenerateList(); 
+            Compute(); 
+        }
     }
 }
