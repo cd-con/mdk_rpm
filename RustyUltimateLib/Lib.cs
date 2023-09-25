@@ -19,7 +19,7 @@ namespace RustyUltimateLib
         {            
             if (int.TryParse(reading, out int n) && n >= range.Start && n <= range.End)
                 return n;
-            onFail($"Неверный ввод. Допустимые значения от {range.Start} до {range.End}");
+            onFail?.Invoke($"Неверный ввод. Допустимые значения от {range.Start} до {range.End}");
             return 0;
         }
     }
