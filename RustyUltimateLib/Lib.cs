@@ -200,7 +200,7 @@ namespace RustyUltimateLib
         /// <param name="rowIndex">Номер строки</param>
         /// <param name="wrapOnMatrixRowOverflow">Включение автоматического оборачивания бОльшего массива в матрицу</param>
         /// <returns>Результат операции</returns>
-        public static bool SetRow<T>(T[,] matrix, T[] row, int rowIndex, bool wrapOnMatrixRowOverflow = true)
+        public static bool SetRow<T>(this T[,] matrix, T[] row, int rowIndex, bool wrapOnMatrixRowOverflow = true)
         {
             if (rowIndex > matrix.GetLength(0))
                 return false;
