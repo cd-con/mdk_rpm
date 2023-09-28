@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace RustyUltimateLib
 {
@@ -108,7 +109,8 @@ namespace RustyUltimateLib
         /// <param name="matrix">Ссылка на матрицу</param>
         public static void Clear<T>(ref T[,] matrix)
         {
-            matrix = new T[matrix.GetLength(0), matrix.GetLength(1)];
+            if (matrix != null)
+                matrix = new T[matrix.GetLength(0), matrix.GetLength(1)];
         }
 
         /// <summary>
@@ -171,6 +173,24 @@ namespace RustyUltimateLib
                                                                                         .Select(item => (T)Convert.ChangeType(item, typeof(T)))
                                                                                         .ToArray();
 
+        public static T[,] ToMatrix<T>(this string str, char columnSeparator = ',', string rowSeparator = "\n")
+        {
+            int rows = Regex.Matches(str, rowSeparator).Count + 1;
+
+            string[] separatedRows = str.Split(rowSeparator);
+
+            int columns = separatedRows[0].Count(x => x == ',') + 1;
+
+            T[,] result = new T[rows, columns];
+
+            for (int i = 0; i < separatedRows.Length; i++)
+            {
+                SetRow(result, separatedRows[i].ToArray<T>(), i, false);
+            }
+
+            return result;           
+        }
+
         /// <summary>
         /// Устанавливает строку в матрицу
         /// </summary>
@@ -218,10 +238,10 @@ namespace RustyUltimateLib
         /// <param name="separator">Кастомный разделитель значений</param>
         /// <param name="newLine">Кастомный разделитель строк</param>
         /// <returns></returns>
-        public static string PPrint<T>(this T[,] matrix, string separator, string newLine = "\n")
+        public static string PPrint<T>(this T[,]? matrix, string separator, string newLine = "\n")
         {
             string result = string.Empty;
-            for (int x = 0; x < matrix.GetLength(0); x++)
+            for (int x = 0; x < matrix?.GetLength(0); x++)
                 result += string.Join(separator, matrix.GetRow(x)) + newLine;
             return result;
         }

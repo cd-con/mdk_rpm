@@ -12,8 +12,8 @@ namespace Practice2_var10
     /// </summary>
     public partial class MainWindow : Window
     {
-        bool NO_BEE_MOVIE = true;
-        private int[]? _ints;
+        bool NO_BEE_MOVIE = false;
+        private int[,]? _ints;
         private bool modifiedFromCode = true;
         public MainWindow()
         {
@@ -22,30 +22,60 @@ namespace Practice2_var10
 
         private void CreateArray_Click(object sender, RoutedEventArgs e)
         {
+
             modifiedFromCode = true;
-            string[] input = arrayBox.Text.Split(":");
-            if (!int.TryParse(input[0], out int a) || a <= 0)
+
+            string[] dim_rndl_rndh = arrayBox.Text.Split(":");
+            string[] dimensions;
+
+            if(dim_rndl_rndh.Length == 0)
+                MessageBox.Show("Пустой ввод!");
+
+            // Тест на английскую Х
+            if (arrayBox.Text.Contains("x"))
             {
-                MessageBox.Show("Для того, чтобы сгенерировать случайный массив, введите в поле `Массив` число, соответствующее длине нового массива.\n\n" +
-                                "Если нужно также указать диапазон случайных чисел, используйте маску <длина массива>:<нижний порог>:<верхний порог>");
+                dimensions = dim_rndl_rndh[0].Split("x");
+            }
+            else
+            {
+                // Если это не английская - значит русская!
+                dimensions = dim_rndl_rndh[0].Split("х");
+            }
+            
+            if (dimensions.Length < 2 || !int.TryParse(dimensions[0], out int x) || !int.TryParse(dimensions[1], out int y) || x <= 0 || y <= 0)
+            {
+                MessageBox.Show("Для того, чтобы сгенерировать случайную матрицу, введите в поле `Матрица` значения, соответствующие маске <строки>x<колонки>.\n\n" +
+                                "Если нужно также указать диапазон случайных чисел, используйте маску <строки>x<колонки>:<нижний порог>:<верхний порог>");
                 arrayBox.Text = "Введите число";
                 arrayBox.Focus();
                 arrayBox.SelectAll();
             }
             else
             {
-                _ints = new int[a];
-                int b, c;
-                switch (input.Length)
+                // Защита от OutOfMemory
+                // Раньше стоял лимит на unsigned int16 (65535), но на таких значениях
+                // у ПК с 16 Гб оперативы случается прикол (см. ссылку)
+                // clck.ru/35tUqJ
+                if (x > 512 || y > 512)
+                {
+                    MessageBox.Show("Указазаны слишком большие размеры массива!");
+                    arrayBox.Text = "Ошибка!";
+                    arrayBox.Focus();
+                    arrayBox.SelectAll();
+                    return;
+                }
+                _ints = new int[x, y];
+                int rnd_l, rnd_h;
+                switch (dim_rndl_rndh.Length)
                 {
                     case 1:
-                        b = -10;
-                        c= 10;
+                        rnd_l = -10;
+                        rnd_h = 10;
                         break;
                     case 3:
-                        if (int.TryParse(input[1], out b) && int.TryParse(input[2], out c))
+                        if (int.TryParse(dim_rndl_rndh[1], out rnd_l) && int.TryParse(dim_rndl_rndh[2], out rnd_h))
                         {
-                            (b, c) = b > c ? (c, b) : (b, c);
+                            (rnd_l, rnd_h) = rnd_l > rnd_h ? (rnd_h, rnd_l) : (rnd_l, rnd_h);
                         }
                         else
                         {
@@ -64,8 +94,8 @@ namespace Practice2_var10
                         arrayBox.SelectAll();
                         return;
                 }
-                BetterArray.Fill(ref _ints, b, c);
-                arrayBox.Text = string.Join(", ", _ints);
+                BetterArray.Fill(ref _ints, rnd_l, rnd_h);
+                arrayBox.Text = _ints.PPrint(", ");
             }
         }
 
@@ -78,7 +108,14 @@ namespace Practice2_var10
         {
             if (_ints != null)
             {
-                resultBox.Text = (_ints.Where(x => x != 0).Aggregate(_ints[0], (a, n) => a - n) + _ints[0]).ToString();
+                int[] mins = new int[_ints.GetLength(0)];
+                for (int row = 0; row < _ints.GetLength(0); row++)
+                {
+                    // КАР КАР КАР КАР
+                    int[] cRow = _ints.GetRow(row);
+                    mins[row] = cRow.Min();
+                }
+                resultBox.Text = $"`{mins.Max()}` из строки {Array.FindIndex(mins, i => i == mins.Max()) + 1}";
             }
             else
             {
@@ -98,7 +135,7 @@ namespace Practice2_var10
                 try
                 {
                     // Можно сделать и через регулярку, но да по_фигу
-                    _ints = arrayBox.Text.Replace(", ", ",").Replace(" ", ",").ToArray<int>();
+                    _ints = arrayBox.Text.Replace(", ", ",").Replace(" ", ",").ToMatrix<int>();
                 }
                 // Нам ничего не нужно ловить здесь
                 catch (FormatException)
@@ -132,8 +169,8 @@ namespace Practice2_var10
             {
                 try
                 {
-                    _ints = BetterArray.Open<int>(dialog.FileName);
-                    arrayBox.Text = string.Join(", ", _ints);
+                    _ints = BetterArray.OpenMatrix<int>(dialog.FileName);
+                    arrayBox.Text = _ints.PPrint(", ");
                 }
                 catch (FormatException)
                 {
