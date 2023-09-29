@@ -14,6 +14,7 @@ namespace Practice2_var10
     {
         bool NO_BEE_MOVIE = false;
         private int[,]? _ints;
+        // Этот флаг нужен для контроля ввода пользователя и исполнения соответствующего кода
         private bool modifiedFromCode = true;
         public MainWindow()
         {
@@ -56,7 +57,10 @@ namespace Practice2_var10
                 // Раньше стоял лимит на unsigned int16 (65535), но на таких значениях
                 // у ПК с 16 Гб оперативы случается прикол (см. ссылку)
                 // clck.ru/35tUqJ
-                if (x > 512 || y > 512)
+                // 
+                // Дополнительно понизил лимит, чтобы не ждать 5 минут в случае если
+                // кто-то решит попробовать сгенерировать большую матрицу
+                if (x > 255 || y > 255)
                 {
                     MessageBox.Show("Указазаны слишком большие размеры массива!");
                     arrayBox.Text = "Ошибка!";
@@ -65,16 +69,21 @@ namespace Practice2_var10
                     return;
                 }
                 _ints = new int[x, y];
+
+                // Парсим аргументы для ГСЧ
                 int rnd_l, rnd_h;
                 switch (dim_rndl_rndh.Length)
                 {
+                    // Маска <размеры матрицы>
                     case 1:
                         rnd_l = -10;
                         rnd_h = 10;
                         break;
+                    // Маска <размеры матрицы>:<нижний предел>:<верхний предел>
                     case 3:
                         if (int.TryParse(dim_rndl_rndh[1], out rnd_l) && int.TryParse(dim_rndl_rndh[2], out rnd_h))
                         {
+                            // Проверяем, что нижний порог ниже верхнего, иначе переворачиваем
                             (rnd_l, rnd_h) = rnd_l > rnd_h ? (rnd_h, rnd_l) : (rnd_l, rnd_h);
                         }
                         else
@@ -86,6 +95,7 @@ namespace Practice2_var10
                             return;
                         }
                         break;
+                    // Остальные маски ввода шлём лесом
                     default:
                         MessageBox.Show("Некорректный ввод!\n\n" +
                                         "Такой комбинации аргументов не существует!\n" +
@@ -94,6 +104,8 @@ namespace Practice2_var10
                         arrayBox.SelectAll();
                         return;
                 }
+
+                // Заполняем...
                 BetterArray.Fill(ref _ints, rnd_l, rnd_h);
                 arrayBox.Text = _ints.PPrint(", ");
             }
@@ -120,26 +132,21 @@ namespace Practice2_var10
             else
             {
                 MessageBox.Show("Ошибка при рассчёте ответа!\nМассив был пуст!");
+                modifiedFromCode = true;
+                resultBox.Text = "Ответ";
             }
         }
 
         private void OnTextChange(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {
-            if (arrayBox.Text == "Массив")
+            if (arrayBox.Text == "Матрица")
             {
                 arrayBox.Focus();
                 arrayBox.SelectAll();
             }
             if (!modifiedFromCode)
             {
-                try
-                {
-                    // Можно сделать и через регулярку, но да по_фигу
-                    _ints = arrayBox.Text.Replace(", ", ",").Replace(" ", ",").ToMatrix<int>();
-                }
-                // Нам ничего не нужно ловить здесь
-                catch (FormatException)
-                { }
+                ConvertToMatrix(arrayBox.Text);
             }
             modifiedFromCode = false;
         }
@@ -169,6 +176,7 @@ namespace Practice2_var10
             {
                 try
                 {
+                    modifiedFromCode = true;
                     _ints = BetterArray.OpenMatrix<int>(dialog.FileName);
                     arrayBox.Text = _ints.PPrint(", ");
                 }
@@ -213,6 +221,23 @@ namespace Practice2_var10
                 }
             }
             Application.Current.Shutdown();
+        }
+
+        /// <summary>
+        /// Заполняет матрицу на основе текста
+        /// </summary>
+        /// <param name="text"></param>
+        public void ConvertToMatrix(string text)
+        {
+            try
+            {
+                // Можно сделать и через регулярку, но да по_фигу
+                _ints = text.Replace(", ", ",").Replace(" ", ",").ToMatrix<int>();
+            }
+            catch (FormatException)
+            {
+                //_ints = null;
+            }
         }
     }
 }
