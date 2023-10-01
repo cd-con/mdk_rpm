@@ -24,8 +24,6 @@ namespace Practice2_var10
         private void CreateArray_Click(object sender, RoutedEventArgs e)
         {
 
-            modifiedFromCode = true;
-
             string[] dim_rndl_rndh = arrayBox.Text.Split(":");
             string[] dimensions;
 
@@ -106,6 +104,7 @@ namespace Practice2_var10
                 }
 
                 // Заполняем...
+                modifiedFromCode = true;
                 BetterArray.Fill(ref _ints, rnd_l, rnd_h);
                 arrayBox.Text = _ints.PPrint(", ");
             }
@@ -120,13 +119,7 @@ namespace Practice2_var10
         {
             if (_ints != null)
             {
-                int[] mins = new int[_ints.GetLength(0)];
-                for (int row = 0; row < _ints.GetLength(0); row++)
-                {
-                    // КАР КАР КАР КАР
-                    int[] cRow = _ints.GetRow(row);
-                    mins[row] = cRow.Min();
-                }
+                int[] mins = Enumerable.Range(0, _ints.GetLength(0)).Select(x => _ints.GetRow(x).Min()).ToArray();
                 resultBox.Text = $"`{mins.Max()}` из строки {Array.FindIndex(mins, i => i == mins.Max()) + 1}";
             }
             else
@@ -236,8 +229,16 @@ namespace Practice2_var10
             }
             catch (FormatException)
             {
-                //_ints = null;
+                _ints = null;
             }
+        }
+
+        private void Debugger_Click(object sender, RoutedEventArgs e)
+        {
+            if (_ints?.Length < 256 || _ints == null)
+                MessageBox.Show($"NO_BEE_MOVIE = {NO_BEE_MOVIE}\n_ints = {(_ints == null ? "NULL" : _ints.PPrint(", "))}", "Отладчик");
+            else
+                MessageBox.Show($"Не удалось открыть отладчик: _ints содержит слишком большое кол-во значений {_ints?.Length}/255");
         }
     }
 }

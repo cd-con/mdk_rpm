@@ -241,8 +241,9 @@ namespace RustyUltimateLib
         public static string PPrint<T>(this T[,]? matrix, string separator, string newLine = "\n")
         {
             string result = string.Empty;
-            for (int x = 0; x < matrix?.GetLength(0); x++)
-                result += string.Join(separator, matrix.GetRow(x)) + newLine;
+            int? rows = matrix?.GetLength(0);
+            for (int x = 0; x < rows; x++)
+                result += string.Join(separator, matrix.GetRow(x)) + (x < rows - 1 ? newLine : "");
             return result;
         }
     }
