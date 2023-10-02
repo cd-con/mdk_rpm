@@ -5,14 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Practice2_var10"
         mc:Ignorable="d"
-        Title="MainWindow" Height="180" Width="300"
+        Title="Практическая №3" Height="180" Width="300"
         Closing="Window_Closing">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="150*"/>
             <ColumnDefinition Width="150"/>
         </Grid.ColumnDefinitions>
-        <Menu Grid.ColumnSpan="2" Grid.RowSpan="1">
+        <Menu Grid.ColumnSpan="2" Grid.RowSpan="1" Height="20" VerticalAlignment="Top">
             <MenuItem Header="Меню">
                 <MenuItem Header="Сохранить" Click="Save_Click"/>
                 <MenuItem Header="Открыть" Click="Open_Click"/>
