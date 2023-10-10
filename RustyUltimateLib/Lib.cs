@@ -32,6 +32,13 @@ namespace RustyUltimateLib
             onFail?.Invoke($"Неверный ввод. Допустимые значения от {range.Start} до {range.End}");
             return 0;
         }
+
+        /// <summary>
+        /// Превращает небезопасный bool? в безопасный :D
+        /// </summary>
+        /// <param name="unsafeBool">Небезопасный bool?</param>
+        /// <returns></returns>
+        public static bool Safe(this bool? unsafeBool) => unsafeBool != null && (bool)unsafeBool;
     }
 
     public static class BetterArray
@@ -97,6 +104,13 @@ namespace RustyUltimateLib
         {
             File.WriteAllText(path, string.Join(customSeparator, array));
         }
+
+        /// <summary>
+        /// Проверяет, отсортирован ли массив по возрастанию
+        /// </summary>
+        /// <param name="array"></param>
+        /// <returns></returns>
+        public static bool IsSorted(this int[] array) => array.SequenceEqual(array.OrderBy(x=>x));
 
         //
         //  *** МЕТОДЫ ДЛЯ ДВУМЕРНЫХ МАССИВОВ ***

@@ -4,18 +4,57 @@ using System;
 using System.Linq;
 using System.Net;
 using System.Windows;
+using Practice3_var11.Utility;
+using System.Windows.Controls;
+using System.Data;
+using System.Windows.Media;
 
 namespace Practice2_var10
 {
+    class IntsStorage
+    {
+        private int[,]? _ints;
+        public DataTable? DataTableView { get; private set; }
+
+        public int[,]? Values
+        {
+            get => _ints;
+            set
+            {
+                _ints = value;
+                Push();
+            }
+        }
+
+        public void RandomInit(int x, int y, int min, int max)
+        {
+            _ints = new int[x, y];
+            BetterArray.Fill(ref _ints, min, max);
+            Push();
+        }
+
+        public void Reset()
+        {
+            BetterArray.Clear(ref _ints);
+            Push();
+        }
+
+        /// <summary>
+        /// Специальный метод для обновления DataTableView. Сделан специально для ручного контроля за обновлениями во избежании утечек памяти.
+        /// </summary>
+        private void Push()
+        {
+            DataTableView = _ints?.ToDataTable();
+        }
+    }
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
         bool NO_BEE_MOVIE = false;
-        private int[,]? _ints;
+        private IntsStorage storage = new();
         // Этот флаг нужен для контроля ввода пользователя и исполнения соответствующего кода
-        private bool modifiedFromCode = true;
         public MainWindow()
         {
             InitializeComponent();
@@ -23,91 +62,85 @@ namespace Practice2_var10
 
         private void CreateArray_Click(object sender, RoutedEventArgs e)
         {
-
-            string[] dim_rndl_rndh = arrayBox.Text.Split(":");
-            string[] dimensions;
-
-            if(dim_rndl_rndh.Length == 0)
-                MessageBox.Show("Пустой ввод!");
-
-            // Тест на английскую Х
-            if (arrayBox.Text.Contains("x"))
-            {
-                dimensions = dim_rndl_rndh[0].Split("x");
-            }
-            else
-            {
-                // Если это не английская - значит русская!
-                dimensions = dim_rndl_rndh[0].Split("х");
-            }
+            Input inputWindow = new("Окно создания нового массива", "Допустимые маски ввода:\n<строки>x<колонки>\n<строки>x<колонки>:<нижний порог>:<верхний порог>");
             
-            if (dimensions.Length < 2 || !int.TryParse(dimensions[0], out int x) || !int.TryParse(dimensions[1], out int y) || x <= 0 || y <= 0)
+            if (inputWindow.ShowDialog().Safe())
             {
-                MessageBox.Show("Для того, чтобы сгенерировать случайную матрицу, введите в поле `Матрица` значения, соответствующие маске <строки>x<колонки>.\n\n" +
-                                "Если нужно также указать диапазон случайных чисел, используйте маску <строки>x<колонки>:<нижний порог>:<верхний порог>");
-                arrayBox.Text = "Введите число";
-                arrayBox.Focus();
-                arrayBox.SelectAll();
-            }
-            else
-            {
-                // Защита от OutOfMemory
-                // Раньше стоял лимит на unsigned int16 (65535), но на таких значениях
-                // у ПК с 16 Гб оперативы случается прикол (см. ссылку)
-                // clck.ru/35tUqJ
-                // 
-                // Дополнительно понизил лимит, чтобы не ждать 5 минут в случае если
-                // кто-то решит попробовать сгенерировать большую матрицу
-                if (x > 255 || y > 255)
-                {
-                    MessageBox.Show("Указазаны слишком большие размеры массива!");
-                    arrayBox.Text = "Ошибка!";
-                    arrayBox.Focus();
-                    arrayBox.SelectAll();
-                    return;
-                }
-                _ints = new int[x, y];
+                string[] dim_rndl_rndh = inputWindow.ResponseText.Split(":");
+                string[] dimensions;
 
-                // Парсим аргументы для ГСЧ
-                int rnd_l, rnd_h;
-                switch (dim_rndl_rndh.Length)
+                // Проверка пустого ввода
+                if (inputWindow.ResponseText.Length == 0)
+                    return;
+
+                // Тест на английскую Х
+                if (inputWindow.ResponseText.Contains("x"))
+                    dimensions = dim_rndl_rndh[0].Split("x");
+                else
+                    // Если это не английская - значит русская!
+                    dimensions = dim_rndl_rndh[0].Split("х");
+
+                if (dimensions.Length < 2 || !int.TryParse(dimensions[0], out int x) || !int.TryParse(dimensions[1], out int y) || x <= 0 || y <= 0)
+                    MessageBox.Show("Для того, чтобы сгенерировать случайную матрицу, введите в поле `Матрица` значения, соответствующие маске <строки>x<колонки>.\n\n" +
+                                    "Если нужно также указать диапазон случайных чисел, используйте маску <строки>x<колонки>:<нижний порог>:<верхний порог>");
+
+                else
                 {
-                    // Маска <размеры матрицы>
-                    case 1:
-                        rnd_l = -10;
-                        rnd_h = 10;
-                        break;
-                    // Маска <размеры матрицы>:<нижний предел>:<верхний предел>
-                    case 3:
-                        if (int.TryParse(dim_rndl_rndh[1], out rnd_l) && int.TryParse(dim_rndl_rndh[2], out rnd_h))
-                        {
-                            // Проверяем, что нижний порог ниже верхнего, иначе переворачиваем
-                            (rnd_l, rnd_h) = rnd_l > rnd_h ? (rnd_h, rnd_l) : (rnd_l, rnd_h);
-                        }
-                        else
-                        {
-                            MessageBox.Show("Некорректный ввод!\n\n" +
-                                            "Невалидные аргументы!");
-                            arrayBox.Focus();
-                            arrayBox.SelectAll();
-                            return;
-                        }
-                        break;
-                    // Остальные маски ввода шлём лесом
-                    default:
-                        MessageBox.Show("Некорректный ввод!\n\n" +
-                                        "Такой комбинации аргументов не существует!\n" +
-                                        "Используйте маску <длина массива>:<нижний порог>:<верхний порог>");
+                    // Защита от OutOfMemory
+                    // Раньше стоял лимит на unsigned int16 (65535), но на таких значениях
+                    // у ПК с 16 Гб оперативы случается прикол (см. ссылку)
+                    // clck.ru/35tUqJ
+                    // 
+                    // Дополнительно понизил лимит, чтобы не ждать 5 минут в случае если
+                    // кто-то решит попробовать сгенерировать большую матрицу
+                    if (x > 255 || y > 255)
+                    {
+                        MessageBox.Show("Указазаны слишком большие размеры массива!");
+                        //arrayBox.Text = "Ошибка!";
                         arrayBox.Focus();
                         arrayBox.SelectAll();
                         return;
-                }
+                    }
 
-                // Заполняем...
-                modifiedFromCode = true;
-                BetterArray.Fill(ref _ints, rnd_l, rnd_h);
-                arrayBox.Text = _ints.PPrint(", ");
-            }
+                    // Парсим аргументы для ГСЧ
+                    int rnd_l, rnd_h;
+                    switch (dim_rndl_rndh.Length)
+                    {
+                        // Маска <размеры матрицы>
+                        case 1:
+                            rnd_l = -10;
+                            rnd_h = 10;
+                            break;
+                        // Маска <размеры матрицы>:<нижний предел>:<верхний предел>
+                        case 3:
+                            if (int.TryParse(dim_rndl_rndh[1], out rnd_l) && int.TryParse(dim_rndl_rndh[2], out rnd_h))
+                            {
+                                // Проверяем, что нижний порог ниже верхнего, иначе переворачиваем
+                                (rnd_l, rnd_h) = rnd_l > rnd_h ? (rnd_h, rnd_l) : (rnd_l, rnd_h);
+                            }
+                            else
+                            {
+                                MessageBox.Show("Некорректный ввод!\n\n" +
+                                                "Невалидные аргументы!");
+                                arrayBox.Focus();
+                                arrayBox.SelectAll();
+                                return;
+                            }
+                            break;
+                        // Остальные маски ввода шлём лесом
+                        default:
+                            MessageBox.Show("Некорректный ввод!\n\n" +
+                                            "Такой комбинации аргументов не существует!\n" +
+                                            "Используйте маску <длина массива>:<нижний порог>:<верхний порог>");
+                            arrayBox.Focus();
+                            arrayBox.SelectAll();
+                            return;
+                    }
+                    storage.RandomInit(x, y, rnd_l, rnd_h);
+                    // Не очень элегантное решение, но сойдёт
+                    arrayBox.ItemsSource = storage.DataTableView?.DefaultView;
+                }
+            }            
         }
 
         /// <summary>
@@ -117,36 +150,32 @@ namespace Practice2_var10
         /// <param name="e"></param>
         private void Solve_Click(object _, RoutedEventArgs __)
         {
-            if (_ints != null)
+            // 11. Дана матрица размера M × N. Найти количество ее строк, элементы которых 
+            // упорядочены по возрастанию.
+            if (storage.Values != null)
             {
-                int[] mins = Enumerable.Range(0, _ints.GetLength(0)).Select(x => _ints.GetRow(x).Min()).ToArray();
-                resultBox.Text = $"`{mins.Max()}` из строки {Array.FindIndex(mins, i => i == mins.Max()) + 1}";
+                // У меня болезнь LINQ'филия
+                // Тянет меня очень на LINQ
+                // Бросила меня девчонка Лия
+                // И сказала то, что не нужно усложнять, где не надо
+                // Плюсом это ещё не очень производительно
+                // И можно запутаться в дальнейшем
+                int solution = Enumerable.Range(0, storage.Values.GetLength(0))
+                                         .Select(x => Enumerable.Range(0, storage.Values.GetLength(1))
+                                         .Select(y => storage.Values[x, y]))
+                                         .Count(row => row.ToArray().IsSorted());
+                resultBox.Text = $"Этот двумерный массив содержит cледующее кол-во строк, отсортированных по возрастанию: {solution}";
             }
             else
             {
                 MessageBox.Show("Ошибка при рассчёте ответа!\nМассив был пуст!");
-                modifiedFromCode = true;
                 resultBox.Text = "Ответ";
             }
         }
 
-        private void OnTextChange(object sender, System.Windows.Controls.TextChangedEventArgs e)
-        {
-            if (arrayBox.Text == "Матрица")
-            {
-                arrayBox.Focus();
-                arrayBox.SelectAll();
-            }
-            if (!modifiedFromCode)
-            {
-                ConvertToMatrix(arrayBox.Text);
-            }
-            modifiedFromCode = false;
-        }
-
         private void Save_Click(object sender, RoutedEventArgs e)
         {
-            if (_ints == null || _ints.Length == 0)
+            if (storage.Values == null || storage.Values.Length == 0)
             {
                 MessageBox.Show("Отменено.\n\nЕсть ли смысл сохранять пустой массив?");
                 return;
@@ -154,7 +183,7 @@ namespace Practice2_var10
             SaveFileDialog dialog = new() { CheckPathExists=true, 
                                             Filter= "Текстовый файл (*.txt)|*.txt|Все файлы (*.*)|*.*" };
             if (dialog.ShowDialog() == true)
-                _ints.Save(dialog.FileName);
+                storage.Values.Save(dialog.FileName);
         }
 
         private void Open_Click(object sender, RoutedEventArgs e)
@@ -169,9 +198,9 @@ namespace Practice2_var10
             {
                 try
                 {
-                    modifiedFromCode = true;
-                    _ints = BetterArray.OpenMatrix<int>(dialog.FileName);
-                    arrayBox.Text = _ints.PPrint(", ");
+                    // TODO Баг здесь
+                    storage.Values = BetterArray.OpenMatrix<int>(dialog.FileName);
+                    //arrayBox.Text = _ints.PPrint(", ");
                 }
                 catch (FormatException)
                 {
@@ -183,9 +212,8 @@ namespace Practice2_var10
 
         private void Clear_Click(object sender, RoutedEventArgs e)
         {
-            modifiedFromCode = true;
-            BetterArray.Clear(ref _ints);
-            arrayBox.Text = "Массив";
+            storage.Reset();
+            //arrayBox.Text = "Массив";
             resultBox.Text = "Ответ";
         }
 
@@ -216,29 +244,23 @@ namespace Practice2_var10
             Application.Current.Shutdown();
         }
 
-        /// <summary>
-        /// Заполняет матрицу на основе текста
-        /// </summary>
-        /// <param name="text"></param>
-        public void ConvertToMatrix(string text)
-        {
-            try
-            {
-                // Можно сделать и через регулярку, но да по_фигу
-                _ints = text.Replace(", ", ",").Replace(" ", ",").ToMatrix<int>();
-            }
-            catch (FormatException)
-            {
-                _ints = null;
-            }
-        }
-
         private void Debugger_Click(object sender, RoutedEventArgs e)
         {
-            if (_ints?.Length < 256 || _ints == null)
-                MessageBox.Show($"NO_BEE_MOVIE = {NO_BEE_MOVIE}\n_ints = {(_ints == null ? "NULL" : _ints.PPrint(", "))}", "Отладчик");
+            if (storage.Values?.Length < 256 || storage.Values == null)
+                MessageBox.Show($"NO_BEE_MOVIE = {NO_BEE_MOVIE}\n_ints = {(storage.Values == null ? "NULL" : storage.Values.PPrint(", "))}", "Отладчик");
             else
-                MessageBox.Show($"Не удалось открыть отладчик: _ints содержит слишком большое кол-во значений {_ints?.Length}/255");
+                MessageBox.Show($"Не удалось открыть отладчик: _ints содержит слишком большое кол-во значений {storage.Values?.Length}/255");
+        }
+
+        private void arrayBox_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
+        {
+            int column = e.Column.DisplayIndex;
+            int row = e.Row.GetIndex();
+
+            if (int.TryParse(((TextBox)e.EditingElement).Text, out int value) && storage.Values != null)
+                storage.Values[row, column] = value;
+            else
+                MessageBox.Show("Неверное значение", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 }
