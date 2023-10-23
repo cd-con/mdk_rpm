@@ -165,9 +165,7 @@ namespace RustyUltimateLib
             T[,] result = new T[lines.Length, lines[0].Split(customSeparator).Length];
 
             for (int index = 0; index < result.GetLength(0); index++)
-            {
                 SetRow(result, lines[index].ToArray<T>(), index);
-            }
 
             return result;
         }

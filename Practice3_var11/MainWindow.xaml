@@ -21,7 +21,11 @@
                 <Separator/>
                 <MenuItem Header="Выход" Click="ReadBeeMovie_Click"/>
             </MenuItem>
-            <MenuItem Header="Отладчик" Click="Debugger_Click"/>
+            <MenuItem Header="Отладка">
+                <MenuItem Header="Открыть окно отладчика" Click="Debugger_Click"/>
+                <MenuItem Header="Принудительно обновить DataGrid" Click="Push_Click"/>
+            </MenuItem>
+            
         </Menu>
         <!-- Разделим панель управления и поля вывода на два Grid -->
         <Grid Grid.Column="1" Margin="0,20,0,0">

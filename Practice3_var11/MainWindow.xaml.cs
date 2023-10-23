@@ -36,13 +36,13 @@ namespace Practice2_var10
         public void Reset()
         {
             BetterArray.Clear(ref _ints);
-            Push();
+            DataTableView = null;
         }
 
         /// <summary>
-        /// Специальный метод для обновления DataTableView. Сделан специально для ручного контроля за обновлениями во избежании утечек памяти.
+        /// Специальный метод для обновления DataTableView.
         /// </summary>
-        private void Push()
+        public void Push()
         {
             DataTableView = _ints?.ToDataTable();
         }
@@ -96,9 +96,6 @@ namespace Practice2_var10
                     if (x > 255 || y > 255)
                     {
                         MessageBox.Show("Указазаны слишком большие размеры массива!");
-                        //arrayBox.Text = "Ошибка!";
-                        arrayBox.Focus();
-                        arrayBox.SelectAll();
                         return;
                     }
 
@@ -198,9 +195,10 @@ namespace Practice2_var10
             {
                 try
                 {
-                    // TODO Баг здесь
+                    // КОСТЫЛЬ!
                     storage.Values = BetterArray.OpenMatrix<int>(dialog.FileName);
-                    //arrayBox.Text = _ints.PPrint(", ");
+                    // Не очень элегантное решение, но сойдёт
+                    arrayBox.ItemsSource = storage.DataTableView?.DefaultView;
                 }
                 catch (FormatException)
                 {
@@ -213,7 +211,7 @@ namespace Practice2_var10
         private void Clear_Click(object sender, RoutedEventArgs e)
         {
             storage.Reset();
-            //arrayBox.Text = "Массив";
+            arrayBox.ItemsSource = null;
             resultBox.Text = "Ответ";
         }
 
@@ -233,15 +231,15 @@ namespace Practice2_var10
                     using var wb = new WebClient();
                     // >:)
                     string[] bee_movie_script = wb.DownloadString("https://gist.githubusercontent.com/MattIPv4/045239bc27b16b2bcf7a3a9a4648c08a/raw/2411e31293a35f3e565f61e7490a806d4720ea7e/bee%2520movie%2520script").Split("\n");
-                    for (int i = 0; i < bee_movie_script.Length - 1; i++)
+                    for (int i = 0; i <= bee_movie_script.Length - 1; i++)
                     {
                         MessageBox.Show(bee_movie_script[i], $"Выход... Прочитано: {i}/{bee_movie_script.Length - 1}");
                     }
                     MessageBox.Show("Поздравляю, ты прочитал весь сценарий `Би Муви: Пчелиный заговор`. Теперь ты можешь выйти.");
-                    NO_BEE_MOVIE = true;
+                    // NO_BEE_MOVIE = true;
                 }
             }
-            Application.Current.Shutdown();
+            // Application.Current.Shutdown();
         }
 
         private void Debugger_Click(object sender, RoutedEventArgs e)
@@ -250,6 +248,12 @@ namespace Practice2_var10
                 MessageBox.Show($"NO_BEE_MOVIE = {NO_BEE_MOVIE}\n_ints = {(storage.Values == null ? "NULL" : storage.Values.PPrint(", "))}", "Отладчик");
             else
                 MessageBox.Show($"Не удалось открыть отладчик: _ints содержит слишком большое кол-во значений {storage.Values?.Length}/255");
+        }
+
+        private void Push_Click(object sender, RoutedEventArgs e)
+        {
+            storage.Push();
+            arrayBox.ItemsSource = storage.DataTableView?.DefaultView;
         }
 
         private void arrayBox_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
