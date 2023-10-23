@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.3.32901.215
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.32602.291
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Practice1_var11", "Practice1_var11\Practice1_var11.csproj", "{BA71694B-3C80-498A-88CD-070D576981F2}"
 EndProject
@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RustyUltimateLib", "RustyUl
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Practice2_var11", "Practice2_var11\Practice2_var11.csproj", "{5B3CA6F5-97AA-46EB-B259-13302A993BC5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Practice3_var11", "Practice3_var11\Practice3_var11.csproj", "{3A60EA68-8E7C-49FA-A9ED-B10364670222}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Practice3_var11", "Practice3_var11\Practice3_var11.csproj", "{3A60EA68-8E7C-49FA-A9ED-B10364670222}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Practice5_var11", "Practice5_var11\Practice5_var11.csproj", "{425E7587-45EF-4C41-9416-499D1488B202}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{3A60EA68-8E7C-49FA-A9ED-B10364670222}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3A60EA68-8E7C-49FA-A9ED-B10364670222}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3A60EA68-8E7C-49FA-A9ED-B10364670222}.Release|Any CPU.Build.0 = Release|Any CPU
+		{425E7587-45EF-4C41-9416-499D1488B202}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{425E7587-45EF-4C41-9416-499D1488B202}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{425E7587-45EF-4C41-9416-499D1488B202}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{425E7587-45EF-4C41-9416-499D1488B202}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
