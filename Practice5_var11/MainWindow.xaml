@@ -8,16 +8,17 @@
         Title="MainWindow" Height="450" Width="800">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="200"/>
-            <RowDefinition Height="200"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="231*"/>
+            <RowDefinition Height="14.039"/>
+            <RowDefinition Height="188*"/>
+            <RowDefinition/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="400*"/>
             <ColumnDefinition Width="10"/>
             <ColumnDefinition Width="400*"/>
         </Grid.ColumnDefinitions>
-        <GroupBox Header="Пара чисел А" Grid.Column="0" Margin="10,10,10,10">
+        <GroupBox Header="Пара чисел А" Grid.Column="0" Grid.Row="0" Margin="10,10,10,10">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="10"/>
@@ -38,8 +39,8 @@
                 <TextBox TextChanged="TextChangeHandler" x:Name="nA2" Margin="0,0,10,0" Grid.Row="3" Text="0" TextWrapping="Wrap" Grid.Column="2"/>
             </Grid>
         </GroupBox>
-        <GridSplitter Grid.Column="1" HorizontalAlignment="Center" Width="4" Margin="0,10,0,10" Grid.RowSpan="3"/>
-        <GroupBox Header="Пара чисел Б" Grid.Row="1" Margin="10,10,10,10">
+        <GridSplitter Grid.Column="1" HorizontalAlignment="Center" Width="4" Margin="0,10,0,8" Grid.RowSpan="3"/>
+        <GroupBox Header="Пара чисел Б" Grid.Row="2" Margin="10,10,10,10">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="10"/>
@@ -60,7 +61,7 @@
                 <TextBox x:Name="nB2" TextChanged="TextChangeHandler" Margin="0,0,10,0" Grid.Row="3" Text="0" TextWrapping="Wrap" Grid.Column="2"/>
             </Grid>
         </GroupBox>
-        <GroupBox Grid.Column="2" Header="Операции" Margin="10,10,10,10" Grid.RowSpan="3">
+        <GroupBox Grid.Column="2" Header="Операции" Margin="10,10,10,10">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="10"/>
@@ -88,12 +89,35 @@
                 <Label Content="на" Grid.Column="3" Grid.Row="1" VerticalAlignment="Center" Height="25" Margin="3,0,2,0"/>
                 <TextBox x:Name="MulNumPair_Scale" TextChanged="TextChangeHandler" Grid.Column="4" Grid.Row="1" Text="1" TextWrapping="Wrap" VerticalAlignment="Center" Height="21"/>
                 <Button Content="Выполнить" Grid.Column="5" HorizontalAlignment="Center" Grid.Row="1" VerticalAlignment="Center" RenderTransformOrigin="0.489,0.605" Width="74" Height="21" Click="Button_Click"/>
-                <Label Content="Умножить пары чисел друг на друга и" Grid.Row="4" VerticalAlignment="Top" Grid.Column="1" Height="25" Margin="1,2,0,0" Grid.ColumnSpan="4" Grid.RowSpan="2"/>
-                <Label Content="записать результат операции в" Grid.Column="1" Margin="1,2,4,0" Grid.Row="5" Grid.RowSpan="2" Height="26" VerticalAlignment="Top" Grid.ColumnSpan="3"/>
-                <RadioButton x:Name="op2A" Content="А" Grid.Column="4" GroupName="ResNumPair" IsChecked="True" Margin="0,0,1,0" Grid.Row="5" VerticalAlignment="Center" Height="14"/>
-                <RadioButton x:Name="op2B" Content="Б" Grid.Column="4" GroupName="ResNumPair" IsChecked="False" Grid.Row="6" VerticalAlignment="Top" Height="15"/>
-                <Button Content="Выполнить" Grid.Column="5" HorizontalAlignment="Center" Grid.Row="5" VerticalAlignment="Center" RenderTransformOrigin="0.489,0.605" Width="74" Height="21" Click="Button_Click_1"/>
-
+                <Label Content="Умножить пары чисел друг на друга и" Grid.Row="3" VerticalAlignment="Center" Grid.Column="1" Height="25" Margin="1,0,0,0" Grid.ColumnSpan="4"/>
+                <Label Content="записать результат операции в" Grid.Column="1" Margin="1,0,4,0" Grid.Row="4" Height="26" VerticalAlignment="Center" Grid.ColumnSpan="3"/>
+                <RadioButton x:Name="op2A" Content="А" Grid.Column="4" GroupName="ResNumPair" IsChecked="True" Margin="0,4,1,0" Grid.Row="4" VerticalAlignment="Top" Height="14"/>
+                <RadioButton x:Name="op2B" Content="Б" Grid.Column="4" GroupName="ResNumPair" IsChecked="False" Grid.Row="4" VerticalAlignment="Top" Height="15" Margin="0,23,0,0" Grid.RowSpan="2"/>
+                <Button Content="Выполнить" Grid.Column="5" HorizontalAlignment="Center" Grid.Row="4" VerticalAlignment="Top" RenderTransformOrigin="0.489,0.605" Width="74" Height="21" Click="Button_Click_1"/>
+                <Label Content="Ввод стороны" Grid.Column="1" Margin="0,1,5,0" Grid.Row="6" Height="26" VerticalAlignment="Top" Grid.ColumnSpan="3" Grid.RowSpan="2"/>
+                <RadioButton x:Name="AB" Content="АB" Grid.Column="3" GroupName="SelectCathet" IsChecked="True" Margin="29,0,2,0" Grid.Row="6" VerticalAlignment="Center" Height="14" Grid.ColumnSpan="2"/>
+                <RadioButton x:Name="AC" Content="AC" Grid.Column="3" GroupName="SelectCathet" IsChecked="False" Grid.Row="7" VerticalAlignment="Top" Height="15" Margin="29,0,1,0" Grid.ColumnSpan="2"/>
+            </Grid>
+        </GroupBox>
+        <GroupBox Header="Треугольник" Grid.Row="2" Margin="10,10,10,10" Grid.Column="2">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="10"/>
+                    <ColumnDefinition Width="82"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="1*"/>
+                </Grid.RowDefinitions>
+                <Label Content="Гипотинуза" HorizontalAlignment="Left" VerticalAlignment="Center" Height="25" Grid.Row="1" Width="72" Grid.Column="1"/>
+                <Label Content="Площадь" HorizontalAlignment="Left" VerticalAlignment="Center" Height="25" Grid.Row="3" Width="72" Grid.Column="1"/>
+                <TextBox x:Name="Hypo" Margin="0,0,10,0" Grid.Row="1" Text="0" TextWrapping="Wrap" Grid.Column="2"/>
+                <TextBox x:Name="sqr" Margin="0,0,10,0" Grid.Row="3" Text="0" TextWrapping="Wrap" Grid.Column="2"/>
             </Grid>
         </GroupBox>
     </Grid>

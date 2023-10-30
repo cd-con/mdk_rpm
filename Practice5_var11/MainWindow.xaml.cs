@@ -12,13 +12,15 @@ namespace Practice5_var11
     {
         Pair a = new();
         Pair b = new();
+
+        RightAngled triangle = new();
         int scale = 1; 
         public MainWindow()
         {
             InitializeComponent();
         }
 
-        private void TextChangeHandler(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        private void TextChangeHandler(object sender, TextChangedEventArgs e)
         {
             TextBox box = sender as TextBox;
             
@@ -49,7 +51,19 @@ namespace Practice5_var11
                         break;
 
                     default:
-                        throw new ArgumentException($"Field {box.Name} does not exist in parser function.");
+                        //throw new ArgumentException($"Field {box.Name} does not exist in parser function.");
+                        break;
+                }
+
+                if (AB != null && AC != null)
+                {
+                    if (AB.IsChecked == true)
+                        triangle.CahtetA = new(a, b);
+                    if (AC.IsChecked == true)
+                        triangle.CathetB = new(a, b);
+
+                    Hypo.Text = $"({triangle.Hypotenuse?.A.A}; {triangle.Hypotenuse?.A.B}) ({triangle.Hypotenuse?.B.A};{triangle.Hypotenuse?.B.B})";
+                    sqr.Text = triangle.Square.ToString();
                 }
             }
             else
