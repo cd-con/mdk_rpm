@@ -95,8 +95,8 @@
                 <RadioButton x:Name="op2B" Content="Б" Grid.Column="4" GroupName="ResNumPair" IsChecked="False" Grid.Row="4" VerticalAlignment="Top" Height="15" Margin="0,23,0,0" Grid.RowSpan="2"/>
                 <Button Content="Выполнить" Grid.Column="5" HorizontalAlignment="Center" Grid.Row="4" VerticalAlignment="Top" RenderTransformOrigin="0.489,0.605" Width="74" Height="21" Click="Button_Click_1"/>
                 <Label Content="Ввод стороны" Grid.Column="1" Margin="0,1,5,0" Grid.Row="6" Height="26" VerticalAlignment="Top" Grid.ColumnSpan="3" Grid.RowSpan="2"/>
-                <RadioButton x:Name="AB" Content="АB" Grid.Column="3" GroupName="SelectCathet" IsChecked="True" Margin="29,0,2,0" Grid.Row="6" VerticalAlignment="Center" Height="14" Grid.ColumnSpan="2"/>
-                <RadioButton x:Name="AC" Content="AC" Grid.Column="3" GroupName="SelectCathet" IsChecked="False" Grid.Row="7" VerticalAlignment="Top" Height="15" Margin="29,0,1,0" Grid.ColumnSpan="2"/>
+                <RadioButton x:Name="AB" Content="АB" Grid.Column="3" GroupName="SelectCathet" IsChecked="True" Margin="29,0,2,0" Grid.Row="6" VerticalAlignment="Center" Height="14" Grid.ColumnSpan="2" Click="AB_Click"/>
+                <RadioButton x:Name="AC" Content="AC" Grid.Column="3" GroupName="SelectCathet" IsChecked="False" Grid.Row="7" VerticalAlignment="Top" Height="15" Margin="29,0,1,0" Grid.ColumnSpan="2" Click="AC_Click"/>
             </Grid>
         </GroupBox>
         <GroupBox Header="Треугольник" Grid.Row="2" Margin="10,10,10,10" Grid.Column="2">

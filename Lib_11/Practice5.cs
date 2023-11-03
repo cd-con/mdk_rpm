@@ -58,7 +58,8 @@ namespace Lib_11
     {
         private Line2D _a = new();
         private Line2D _b = new();
-        public Line2D CahtetA
+
+        public Line2D CathetA
         {
             get => _a;
             set
@@ -93,8 +94,15 @@ namespace Lib_11
 
         private void CalcSquare()
         {
+            int x = _a.GetLength();
+            int y = _b.GetLength();
+            int z = Hypotenuse.GetLength();
+
             int hPerim = (_a.GetLength() + _b.GetLength() + Hypotenuse.GetLength()) / 2;
-            Square = Math.Sqrt(hPerim * (hPerim - _a.GetLength()) * (hPerim - _b.GetLength()) * (hPerim - Hypotenuse.GetLength()));
+            int a = hPerim - _a.GetLength();
+            int b = hPerim - _b.GetLength();
+            int c = hPerim - Hypotenuse.GetLength();
+            Square = Math.Sqrt(hPerim * a * b  * c);
         }
     }
 

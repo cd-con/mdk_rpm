@@ -22,6 +22,7 @@ namespace Practice5_var11
 
         private void TextChangeHandler(object sender, TextChangedEventArgs e)
         {
+
             TextBox box = sender as TextBox;
             
             if (box.Text.Length == 0)
@@ -58,7 +59,7 @@ namespace Practice5_var11
                 if (AB != null && AC != null)
                 {
                     if (AB.IsChecked == true)
-                        triangle.CahtetA = new(a, b);
+                        triangle.CathetA = new(a, b);
                     if (AC.IsChecked == true)
                         triangle.CathetB = new(a, b);
 
@@ -103,6 +104,26 @@ namespace Practice5_var11
                 b = result;
 
             Update();
+        }
+
+        private void AB_Click(object sender, RoutedEventArgs e)
+        {
+            a = triangle.CathetA.A;
+            b = triangle.CathetA.B;
+            nA1.Text = triangle.CathetA.A.A.ToString();
+            nA2.Text = triangle.CathetA.A.B.ToString();
+            nB1.Text = triangle.CathetA.B.A.ToString();
+            nB2.Text = triangle.CathetA.B.B.ToString();
+        }
+
+        private void AC_Click(object sender, RoutedEventArgs e)
+        {
+            a = triangle.CathetB.A;
+            b = triangle.CathetB.B;
+            nA1.Text = triangle.CathetB.A.A.ToString();
+            nA2.Text = triangle.CathetB.A.B.ToString();
+            nB1.Text = triangle.CathetB.B.A.ToString();
+            nB2.Text = triangle.CathetB.B.B.ToString();
         }
     }
 }
