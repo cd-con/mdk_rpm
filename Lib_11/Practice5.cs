@@ -51,7 +51,7 @@ namespace Lib_11
             B = _b;
         }
 
-        public int GetLength() => Math.Abs(A.A - B.A + A.B - B.B);
+        public int GetLength() => (int)MathF.Abs(MathF.Sqrt(MathF.Pow(A.A - B.A, 2) + MathF.Pow(B.B - B.A, 2)));
     }
 
     public class RightAngled
@@ -94,15 +94,11 @@ namespace Lib_11
 
         private void CalcSquare()
         {
-            int x = _a.GetLength();
-            int y = _b.GetLength();
-            int z = Hypotenuse.GetLength();
-
             int hPerim = (_a.GetLength() + _b.GetLength() + Hypotenuse.GetLength()) / 2;
             int a = hPerim - _a.GetLength();
             int b = hPerim - _b.GetLength();
             int c = hPerim - Hypotenuse.GetLength();
-            Square = Math.Sqrt(hPerim * a * b  * c);
+            Square = Math.Round(Math.Sqrt(hPerim * a * b  * c), 2);
         }
     }
 

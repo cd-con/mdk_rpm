@@ -69,7 +69,7 @@ namespace Practice5_var11
             }
             else
             {
-                MessageBox.Show($"Ошибка парсинга значений из {box.Name}!\nХуйня ввод, переделывай");
+                MessageBox.Show($"Ошибка парсинга значений из {box.Name}!\nПлохой ввод, переделывай");
                 box.SelectAll();
             }
         }
