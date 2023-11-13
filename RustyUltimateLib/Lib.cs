@@ -38,7 +38,8 @@ namespace RustyUltimateLib
         /// </summary>
         /// <param name="unsafeBool">Небезопасный bool?</param>
         /// <returns></returns>
-        public static bool Safe(this bool? unsafeBool) => unsafeBool != null && (bool)unsafeBool;
+        public static bool ToSafe(this bool? unsafeBool) => unsafeBool != null && (bool)unsafeBool;
+
     }
 
     public static class BetterArray

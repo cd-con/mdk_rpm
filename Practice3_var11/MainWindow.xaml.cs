@@ -64,7 +64,7 @@ namespace Practice2_var10
         {
             Input inputWindow = new("Окно создания нового массива", "Допустимые маски ввода:\n<строки>x<колонки>\n<строки>x<колонки>:<нижний порог>:<верхний порог>");
             
-            if (inputWindow.ShowDialog().Safe())
+            if (inputWindow.ShowDialog().ToSafe())
             {
                 string[] dim_rndl_rndh = inputWindow.ResponseText.Split(":");
                 string[] dimensions;
