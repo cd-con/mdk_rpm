@@ -7,17 +7,23 @@
         mc:Ignorable="d"
         MinHeight="200"
         MinWidth="400"
-        Title="RegExp simulator" Height="200" Width="400">
+        Title="RegEx Workbench" Height="200" Width="400">
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="100*"/>
             <ColumnDefinition Width="100*"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <ListBox x:Name="StrContainer"
-                 Margin="10,10,10,10"
-                 PreviewMouseRightButtonDown="ListBoxRMB_Handler"
-                 SelectionMode="Single">
+                 Margin="10,5,10,10"
+                 PreviewMouseRightButtonUp="ListBoxRMB_Handler"
+                 SelectionMode="Single"
+                 PreviewMouseDown="ContainerClick_Handler" 
+                 Grid.Row="1">
             <ListBox.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="Тестируемая строка"
@@ -28,17 +34,19 @@
                               Click="AddChange_Click"/>
                     <MenuItem Header="Удалить"
                               IsEnabled="False"
-                              Click="Delete_Click"/>
+                              Click="SubmenuDelete_Click"/>
                     <Separator/>
                     <MenuItem Header="Очистить"
-                              Click="Clear_Click"/>
+                              Click="SubmenuClear_Click"/>
                 </ContextMenu>
             </ListBox.ContextMenu>
         </ListBox>
-        <ListBox x:Name="RegExpContainer"
-                 Margin="10,10,10,10"
-                 PreviewMouseRightButtonDown="ListBoxRMB_Handler"
-                 SelectionMode="Single" Grid.Column="1">
+        <ListBox x:Name="RegexContainer"
+                 Margin="10,5,9,10"
+                 PreviewMouseRightButtonUp="ListBoxRMB_Handler"
+                 SelectionMode="Single" 
+                 Grid.Column="1"                 
+                 PreviewMouseDown="ContainerClick_Handler" Grid.Row="1">
             <ListBox.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="Регулярное выражение"
@@ -49,20 +57,51 @@
                               Click="AddChange_Click"/>
                     <MenuItem Header="Удалить"
                               IsEnabled="False"
-                              Click="Delete_Click"/>
+                              Click="SubmenuDelete_Click"/>
                     <Separator/>
                     <MenuItem Header="Проверить..."
                               IsEnabled="False">
                         <MenuItem Header="Выбранную строку"
-                                  Click="ValidateSelectedString"/>
+                                  Click="SubmenuValidateSelectedString_Click"/>
                         <MenuItem Header="Все строки"
-                                  Click="ValidateAll"/>
+                                  Click="SubmenuValidateAll_Click"/>
                     </MenuItem>
                     <Separator/>
                     <MenuItem Header="Очистить"
-                              Click="Clear_Click"/>
+                              Click="SubmenuClear_Click"/>
                 </ContextMenu>
             </ListBox.ContextMenu>
         </ListBox>
+
+        <Menu Grid.ColumnSpan="3">
+            <MenuItem Header="Данные">
+                <MenuItem Header="Тестируемые строки">
+                    <MenuItem Tag="TestString" 
+                              Header="Открыть" 
+                              Click="MenuOpen_Click"/>
+                    <MenuItem Tag="TestString" 
+                              Header="Сохранить" 
+                              Click="MenuSave_Click"/>
+                    <Separator/>
+                    <MenuItem Tag="TestString" 
+                              Header="Очистить" 
+                              Click="MenuClear_Click"/>
+                </MenuItem>
+                <MenuItem Header="Регулярные выражения">
+                    <MenuItem Tag="RegEx" 
+                              Header="Открыть"
+                              Click="MenuOpen_Click"/>
+                    <MenuItem Tag="RegEx" 
+                              Header="Сохранить"
+                              Click="MenuSave_Click"/>
+                    <Separator/>
+                    <MenuItem Tag="RegEx"
+                              Header="Очистить"
+                              Click="MenuClear_Click"/>
+                </MenuItem>
+                <MenuItem Header="Задать разделитель результата" Click="MenuDefineSeparator_Click"/>
+            </MenuItem>
+            <MenuItem Header="О программе" Click="About_Click"/>
+        </Menu>
     </Grid>
 </Window>

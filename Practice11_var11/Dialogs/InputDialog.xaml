@@ -21,7 +21,8 @@
                 x:Name="InputBox"
                  TextWrapping="Wrap"
                  Text="Some value"
-                Height="75"/>
+                Height="75" 
+                AcceptsReturn="True"/>
             <Separator Opacity="0" Height="15"/>
             <Button Content="OK" Width="84" Click="Button_Click" Height="20"/>
 
