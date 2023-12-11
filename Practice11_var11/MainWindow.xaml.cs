@@ -22,56 +22,37 @@ namespace Practice11_var11
         public MainWindow()
         {
             InitializeComponent();
-            LoadStrContainer("strs.txt");
-            LoadRegexContainer("regexps.txt");
+            // Загрузка прошлой сессии
+            LoadContainer(StrContainer, "strs.txt");
+            LoadContainer(RegexContainer, "regexps.txt");
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="path"></param>
-        private void LoadStrContainer(string path)
+        private bool LoadContainer(ListBox container, string path)
         {
             try
             {
                 foreach (string item in File.OpenText(path).ReadToEnd().Split('\n'))
                     if (item != "")
-                        StrContainer.Items.Add(item);
+                        container.Items.Add(item);
+                return true;
             }
-            catch (IOException) { }
+            catch (IOException)
+            {
+                return false;
+            }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="path"></param>
-        private void LoadRegexContainer(string path)
+        private bool SaveContainer(ListBox container, string path)
         {
             try
             {
-                foreach (string item in File.OpenText(path).ReadToEnd().Split('\n'))
-                    if (item != "")
-                        RegexContainer.Items.Add(item);
+                File.WriteAllText(path, string.Join("\n", container.Items.OfType<string>().ToArray()));
+                return true;
             }
-            catch (IOException) { }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="path"></param>
-        private void DumpStrContainer(string path)
-        {
-            File.WriteAllText(path, string.Join("\n", StrContainer.Items.OfType<string>().ToArray()));
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="path"></param>
-        private void DumpRegexContainer(string path)
-        {
-            File.WriteAllText(path, string.Join("\n", RegexContainer.Items.OfType<string>().ToArray()));
+            catch (IOException)
+            {
+                return false;
+            }
         }
 
         /// <summary>
@@ -131,10 +112,10 @@ namespace Practice11_var11
         public static string OpenInputWindow(string value = "Введите значение", string @default = "Значение")
         {
             InputDialog dialog = new(value) { Text = @default };
+
             if (dialog.ShowDialog() == true)
-            {
                 return dialog.Text;
-            }
+
             return string.Empty;
         }
 
@@ -195,15 +176,9 @@ namespace Practice11_var11
         /// <param name="e"></param>
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            try
-            {
-                DumpStrContainer("strs.txt");
-                DumpRegexContainer("regexps.txt");
-            }
-            catch (IOException)
-            {
+            // Сохраняем сессию
+            if (!SaveContainer(StrContainer, "strs.txt") || !SaveContainer(RegexContainer, "regexps.txt"))
                 MessageBox.Show("Не удалось сохранить данные!", "Ошибка чтения/записи!", MessageBoxButton.OK, MessageBoxImage.Stop);
-            }
         }
 
         /// <summary>
@@ -241,7 +216,8 @@ namespace Practice11_var11
         /// <exception cref="NotImplementedException"></exception>
         private void MenuOpen_Click(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog dialog = new() { };
+            OpenFileDialog dialog = new();
+            dialog.Filter = "Текстовый файл (*.txt)|*.txt| Все файлы (*.*)|*.*";
 
             MenuItem? menuItem = sender as MenuItem;
 
@@ -250,10 +226,10 @@ namespace Practice11_var11
                 switch (menuItem?.Tag)
                 {
                     case "TestString":
-                        LoadStrContainer(dialog.FileName);
+                        LoadContainer(StrContainer, dialog.FileName);
                         break;
                     case "RegEx":
-                        LoadRegexContainer(dialog.FileName);
+                        LoadContainer(RegexContainer, dialog.FileName);
                         break;
                     default:
                         throw new NotImplementedException($"MenuItem tag {menuItem?.Tag} is not implemented!");
@@ -269,7 +245,8 @@ namespace Practice11_var11
         /// <exception cref="NotImplementedException"></exception>
         private void MenuSave_Click(object sender, RoutedEventArgs e)
         {
-            SaveFileDialog dialog = new() { };
+            SaveFileDialog dialog = new();
+            dialog.Filter = "Текстовый файл (*.txt)|*.txt| Все файлы (*.*)|*.*";
 
             MenuItem? menuItem = sender as MenuItem;
 
@@ -280,10 +257,10 @@ namespace Practice11_var11
                     switch (menuItem?.Tag)
                     {
                         case "TestString":
-                            DumpStrContainer(dialog.FileName);
+                            SaveContainer(StrContainer, dialog.FileName);
                             break;
                         case "RegEx":
-                            DumpRegexContainer(dialog.FileName);
+                            SaveContainer(RegexContainer, dialog.FileName);
                             break;
                         default:
                             throw new NotImplementedException($"MenuItem tag {menuItem?.Tag} is not implemented!");
