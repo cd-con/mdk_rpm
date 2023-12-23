@@ -243,6 +243,8 @@ namespace RustyUltimateLib
         /// <returns></returns>
         public static T[] GetRow<T>(this T[,] matrix, int row) => Enumerable.Range(0, matrix.GetLength(1)).Select(colIndex => matrix[row, colIndex]).ToArray();
 
+        public static T[] GetColumn<T>(this T[,] matrix, int column) => Enumerable.Range(0, matrix.GetLength(0)).Select(rowIndex => matrix[rowIndex, column]).ToArray();
+
         /// <summary>
         /// Создаёт красивое отображение матрицы
         /// </summary>
